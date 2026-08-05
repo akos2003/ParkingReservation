@@ -8,4 +8,10 @@ public class CreateReservationDto
     public DateTimeOffset StartTime { get; set; }
     public DateTimeOffset EndTime { get; set; }
     public required string ApplicantName { get; set; }
+
+    // Mozgássérült jogosultság ellenőrzésére
+    public bool HasSpecialPermit { get; set; }
+
+    // Új mező az elektromos járművek ellenőrzésére
+    public bool HasElectricVehicle { get; set; }
 }

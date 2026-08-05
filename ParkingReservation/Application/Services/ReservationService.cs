@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using ParkingReservation.Application.DTOs;
 using ParkingReservation.Domain.Entities;
+using ParkingReservation.Domain.Enums;
 using ParkingReservation.Infrastructure.Data;
 
 namespace ParkingReservation.Application.Services;
@@ -63,12 +64,26 @@ public class ReservationService : IReservationService
 
     public async Task<ReservationDto?> CreateAsync(CreateReservationDto dto)
     {
-        bool spaceExists = await _context.ParkingSpaces.AnyAsync(p => p.Id == dto.ParkingSpaceId);
-        if (!spaceExists)
+        ParkingSpace? space = await _context.ParkingSpaces.FirstOrDefaultAsync(p => p.Id == dto.ParkingSpaceId);
+
+        if (space == null)
         {
             return null;
         }
 
+        // Mozgássérült jogosultság ellenőrzése
+        if (space.Type == ParkingSpaceType.Accessible && dto.HasSpecialPermit == false)
+        {
+            throw new InvalidOperationException("Mozgássérült parkolóhely foglalásához érvényes engedély szükséges (HasSpecialPermit = true).");
+        }
+
+        // --- Új üzleti logika: Elektromos jármű ellenőrzése ---
+        if (space.Type == ParkingSpaceType.Electric && dto.HasElectricVehicle == false)
+        {
+            throw new InvalidOperationException("Elektromos parkolóhely foglalásához elektromos jármű szükséges (HasElectricVehicle = true).");
+        }
+
+        // Ütközésvizsgálat
         bool hasConflict = await _context.Reservations
             .AnyAsync(r => r.ParkingSpaceId == dto.ParkingSpaceId &&
                            r.StartTime < dto.EndTime &&
