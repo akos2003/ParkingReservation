@@ -1,4 +1,8 @@
 <Solution>
+  <Folder Name="/Solution Items/">
+    <File Path="docker-compose.yml" />
+    <File Path="Dockerfile" />
+  </Folder>
   <Project Path="ParkingReservation.Tests/ParkingReservation.Tests.csproj" />
   <Project Path="ParkingReservation/ParkingReservation.csproj" />
 </Solution>
