@@ -1,34 +1,43 @@
+using System;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.EntityFrameworkCore;
+using ParkingReservation.Infrastructure.Data;
 
-namespace ParkingReservation
+WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
+
+// --- Szolgáltatások (Services) regisztrációja ---
+
+builder.Services.AddControllers();
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
+// Csatlakozási karakterlánc beolvasása biztonságosan
+string connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
+    ?? throw new InvalidOperationException("A 'DefaultConnection' connection string nem található az appsettings.json fájlban.");
+
+// AppDbContext regisztrációja a DI konténerben
+builder.Services.AddDbContext<AppDbContext>(options =>
 {
-    public class Program
-    {
-        public static void Main(string[] args)
-        {
-            var builder = WebApplication.CreateBuilder(args);
+    options.UseSqlServer(connectionString);
+});
 
-            // Add services to the container.
+WebApplication app = builder.Build();
 
-            builder.Services.AddControllers();
-            // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-            builder.Services.AddOpenApi();
+// --- HTTP kérés folyamat (Pipeline) konfigurálása ---
 
-            var app = builder.Build();
-
-            // Configure the HTTP request pipeline.
-            if (app.Environment.IsDevelopment())
-            {
-                app.MapOpenApi();
-            }
-
-            app.UseHttpsRedirection();
-
-            app.UseAuthorization();
-
-
-            app.MapControllers();
-
-            app.Run();
-        }
-    }
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
 }
+
+app.UseHttpsRedirection();
+
+app.UseAuthorization();
+
+app.MapControllers();
+
+app.Run();
