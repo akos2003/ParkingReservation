@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
 using ParkingReservation.Infrastructure.Data;
+using ParkingReservation.Application.Services;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
@@ -13,6 +14,8 @@ WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddScoped<IParkingSpaceService, ParkingSpaceService>();
+builder.Services.AddScoped<IReservationService, ReservationService>();
 
 // Csatlakozási karakterlánc beolvasása biztonságosan
 string connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
