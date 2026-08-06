@@ -1,7 +1,11 @@
 <Solution>
   <Folder Name="/Solution Items/">
+    <File Path="API-leiras.md" />
     <File Path="docker-compose.yml" />
     <File Path="Dockerfile" />
+    <File Path="Dontesi_Naplo_es_Reflexio.md" />
+    <File Path="Felhasznaloi_kezikonyv.md" />
+    <File Path="Rendszerterv.md" />
   </Folder>
   <Project Path="ParkingReservation.Tests/ParkingReservation.Tests.csproj" />
   <Project Path="ParkingReservation/ParkingReservation.csproj" />

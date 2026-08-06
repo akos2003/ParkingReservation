@@ -1,0 +1,16 @@
+# Döntési Napló
+
+| # | Döntési pont | Amit választottál | Miért | Milyen alternatívát vetettél el |
+| :--- | :--- | :--- | :--- | :--- |
+| 1 | **Alkalmazás felülete (UI/API)** | REST API (ASP.NET Core) | Egy modern frontend vagy külső rendszer könnyebben tud csatlakozni hozzá, és a Swagger révén kiválóan dokumentálható. | Parancssoros (CLI) alkalmazás. Bár a fejlesztése gyorsabb lett volna, nem skálázható és kevésbé felel meg a modern iparági elvárásoknak. |
+| 2 | **Adatelérési technológia** | Entity Framework Core (Code-First) | A gyors prototipizálás, a beépített migrációk és az objektum-orientált, típusbiztos megközelítés miatt hatékonyabb a relációs adatok kezelésére. | Dapper (Micro-ORM). Teljesítményben gyorsabb lehet, de a nyers SQL lekérdezések írása és karbantartása indokolatlanul megnövelte volna a fejlesztési időt. |
+| 3 | **Adatátviteli objektumok (DTO-k)** | Külön DTO osztályok használata (pl. `CreateReservationDto`) | Leválasztja az adatbázis-entitásokat az API kimenetéről, így elkerülhető a túl- és alulposztolás (overposting/underposting), és növeli a biztonságot. | Az adatbázis entitások (Models) közvetlen kiajánlása és fogadása a Controllerekben. Biztonsági kockázatot jelentett volna. |
+| 4 | **Üzleti logika elhelyezése** | Külön Service réteg bevezetése (`IReservationService`) | Követi a "Separation of Concerns" elvet. A Controllerek vékonyak maradnak, a logika pedig könnyen mockolható és egységtesztelhető (Unit Test) lesz. | A DbContext közvetlen injektálása és használata a Controllerekben (Fat Controllers). |
+| 5 | **Konténerizációs stratégia** | Docker és Docker Compose használata | Biztosítja a "futtasd egy paranccsal" elvet, függetlenítve a rendszert a gazdagép környezetétől (adatbázis és API együttese). | Hagyományos, lokális telepítés és kézi konfiguráció. Elvetve, mert lassú, nehezen reprodukálható és nem felel meg a modern DevOps elvárásoknak. |
+| 6 | **AI eszköz kiválasztása a folyamat támogatására** | Gemini Pro | Hatékonyan generálta le a különböző boilerplate kódokat (alapszintű osztályok, DTO-k, Controller vázak). | ChatGPT. Az alternatív AI eszköz helyett a Gemini Pro-t választottam a kódstruktúrák generálásának hatékonysága miatt. |
+
+---
+
+## Rövid reflexió
+
+A projekt megvalósítása során a fő fókusz a megfelelő struktúra kialakításán és a teljes rendszer Dockerben való futtathatóvá tételén volt. A kódolási folyamatban nagy segítséget jelentettek a Gemini által generált sablonok és vázak, ugyanakkor a hálózati integráció, a portok összehangolása és a konténerizációs környezet stabilitásának elérése komoly szakmai kihívást és iterációs folyamatot igényelt. A felmerülő hálózati és konfigurációs akadályok leküzdése révén strukturáltabb rálátást kaptam a komponensek együttműködésére. Ez a tapasztalat jelentősen elmélyítette a konténerizált alkalmazások üzemeltetésével kapcsolatos ismereteimet. Összességében sokat tanultam a modern .NET backend és a konténerizációs technológiák gyakorlati alkalmazásáról, valamint a komplex hálózati hibák hatékony elhárításáról.
